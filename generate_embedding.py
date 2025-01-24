@@ -1,25 +1,15 @@
 import os
-import json
-import numpy as np
-
 from dotenv import load_dotenv
-# from langchain.llms import OpenAI
+
+from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_core.output_parsers import StrOutputParser
 from langchain_upstage import UpstageEmbeddings
-from sklearn.metrics.pairwise import cosine_similarity
 
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
-
-
-json_path = os.path.join(os.path.dirname('./'), "tool_name.json")
-
-
-with open(json_path, "r", encoding="utf-8") as file:
-    json_data = json.load(file)
 
 llm = ChatOpenAI(
     model="gpt-4",
@@ -50,9 +40,11 @@ def get_chain(llm):
     return extract_chain  # 사전 기반 체인 반환
 
 # Word embedding dictionary (예시)
-class_names = list(json_data.values())
-
-res = np.array(embeddings.embed_documents(class_names))
+class_name = {
+    "embedding_vector1": "driver",
+    "embedding_vector2": "hammer",
+    "embedding_vector3": "wrench"
+}
 
 # 사용자 입력 예시
 user_input = input("문장을 입력하세요: ")
